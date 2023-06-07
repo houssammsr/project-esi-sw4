@@ -1,16 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FullName from './components_profile/FirstName';
 import Email from './components_profile/Email';
 import Adresse from './components_profile/Adresse';
 import ContactNumber from './components_profile/ContactNumber';
 import Password from './components_profile/Password';
 import styles from './EditProfile.module.css';
-
 const EditProfile = () => {
-  const [fullName, setFullName] = useState('Mansour Houssam');
-  const [email, setEmail] = useState('h.mansour@esi-sba.dz');
-  const [adresse, setAdresse] = useState('Cite Tarek Ben Ziad BT C N 12, M’Sila');
-  const [contactNumber, setContactNumber] = useState('05 55 12 56 32');
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [adresse, setAdresse] = useState('');
+  const [contactNumber, setContactNumber] = useState('');
+
+  useEffect(() => {
+    fetchProfileData();
+  }, []);
+
+  const fetchProfileData = async () => {
+    try {
+      const response = await fetch('/api/profile');
+      if (!response.ok) {
+        throw new Error('Failed to fetch profile data');
+      }
+      const profileData = await response.json();
+      setFullName(profileData.fullName);
+      setEmail(profileData.email);
+      setAdresse(profileData.adresse);
+      setContactNumber(profileData.contactNumber);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleFullNameChange = (value) => {
     setFullName(value);

@@ -1,6 +1,18 @@
+import { useCallback,useState } from "react";
 import styles from "./ChangeNumberPopUp.module.css";
 
-const ChangeNumberPopUp = ({ newContactNumber, onNewContactNumberChange, onSaveButtonClick }) => {
+const ChangeNumberPopUp = ({ initialContactNumber, onSaveButtonClick }) => {
+  const [newContactNumber, setNewContactNumber] = useState(initialContactNumber);
+
+  const handleNewContactNumberChange = useCallback((e) => {
+    setNewContactNumber(e.target.value);
+  }, []);
+
+  const handleSaveButtonClick = useCallback(() => {
+    console.log(newContactNumber);
+    onSaveButtonClick(newContactNumber);
+  }, [newContactNumber, onSaveButtonClick]);
+
   return (
     <div className={styles.changeNumberPopUp}>
       <div className={styles.copyParent}>
@@ -8,11 +20,11 @@ const ChangeNumberPopUp = ({ newContactNumber, onNewContactNumberChange, onSaveB
           className={styles.copy}
           type="text"
           placeholder="New contact number"
-          id="NewContactNumber"
+          id="newContactNumber"
           value={newContactNumber}
-          onChange={onNewContactNumberChange}
+          onChange={handleNewContactNumberChange}
         />
-        <button className={styles.saveButton} onClick={onSaveButtonClick}>
+        <button className={styles.saveButton} onClick={handleSaveButtonClick}>
           <div className={styles.save}>Save</div>
         </button>
       </div>
